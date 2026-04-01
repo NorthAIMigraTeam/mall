@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: build-mall-search
+  namespace: infra
+spec:
+  entrypoint: build-and-push
+  arguments:
+    parameters:
+      - name: git-commit-sha
+        value: "{{workflow.parameters.git-commit-sha}}"
+  templates:
+    - name: build-and-push
+      steps:
+        - - name: build-image
+            template: kaniko-build
+        - - name: update-image-tag
+            template: update-aidevops-pr
+
+    - name: kaniko-build
+      container:
+        image: gcr.io/kaniko-project/executor:latest
+        args:
+          - "--context=git://github.com/NorthAIMigraTeam/mall"
+          - "--dockerfile=mall-search/Dockerfile"
+          - "--destination=registry.cn-beijing.aliyuncs.com/mall-h1/mall-search:{{workflow.parameters.git-commit-sha}}"
+          - "--destination=registry.cn-beijing.aliyuncs.com/mall-h1/mall-search:latest"
+        volumeMounts:
+          - name: docker-config
+            mountPath: /kaniko/.docker/
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: acr-credentials
+
+    - name: update-aidevops-pr
+      script:
+        image: alpine/git:latest
+        command: [sh]
+        source: |
+          # 向 AIDevOps 仓库提 PR 更新 mall-search 镜像 tag
+          git clone https://github.com/NorthAIMigraTeam/AIDevOps.git
+          cd AIDevOps
+          git checkout -b update-mall-search-{{workflow.parameters.git-commit-sha}}
+          sed -i "s|image:.*mall-search:.*|image: registry.cn-beijing.aliyuncs.com/mall-h1/mall-search:{{workflow.parameters.git-commit-sha}}|g" \
+            deploy/k8s/mall/mall-search/deployment.yaml
+          git add deploy/k8s/mall/mall-search/deployment.yaml
+          git commit -m "ci: update mall-search image tag to {{workflow.parameters.git-commit-sha}}"
+          git push origin update-mall-search-{{workflow.parameters.git-commit-sha}}
+          # 通过 gh CLI 创建 PR（需注入 GITHUB_TOKEN）
+          gh pr create --title "ci: update mall-search image tag" \
+            --body "Automated PR from CI: update mall-search to {{workflow.parameters.git-commit-sha}}" \
+            --base main

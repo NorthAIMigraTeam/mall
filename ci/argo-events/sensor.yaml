@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: mall-build-sensor
+  namespace: infra
+spec:
+  dependencies:
+    - name: mall-push
+      eventSourceName: mall-github
+      eventName: mall-push
+  triggers:
+    # mall-admin 服务：仅 mall-admin/ 目录变更时触发
+    - template:
+        name: build-mall-admin
+        conditions: "mall-push"
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: build-mall-admin-
+              spec:
+                workflowTemplateRef:
+                  name: build-mall-admin
+      filters:
+        data:
+          - path: "body.commits.#.modified.#"
+            type: string
+            value: "mall-admin/"
+
+    # mall-portal 服务：仅 mall-portal/ 目录变更时触发
+    - template:
+        name: build-mall-portal
+        conditions: "mall-push"
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: build-mall-portal-
+              spec:
+                workflowTemplateRef:
+                  name: build-mall-portal
+      filters:
+        data:
+          - path: "body.commits.#.modified.#"
+            type: string
+            value: "mall-portal/"
+
+    # mall-search 服务：仅 mall-search/ 目录变更时触发
+    - template:
+        name: build-mall-search
+        conditions: "mall-push"
+        argoWorkflow:
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: build-mall-search-
+              spec:
+                workflowTemplateRef:
+                  name: build-mall-search
+      filters:
+        data:
+          - path: "body.commits.#.modified.#"
+            type: string
+            value: "mall-search/"
