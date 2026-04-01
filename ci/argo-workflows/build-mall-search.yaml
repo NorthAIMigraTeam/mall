@@ -38,9 +38,9 @@ spec:
         image: alpine/git:latest
         command: [sh]
         source: |
-          # 向 AIops 仓库提 PR 更新 mall-search 镜像 tag
-          git clone https://github.com/NorthAIMigraTeam/AIops.git
-          cd AIops
+          # 向 AIOps 仓库提 PR 更新 mall-search 镜像 tag
+          git clone https://github.com/NorthAIMigraTeam/AIOps.git
+          cd AIOps
           git checkout -b update-mall-search-{{workflow.parameters.git-commit-sha}}
           sed -i "s|image:.*mall-search:.*|image: registry.cn-beijing.aliyuncs.com/mall-h1/mall-search:{{workflow.parameters.git-commit-sha}}|g" \
             deploy/k8s/mall/mall-search/deployment.yaml
