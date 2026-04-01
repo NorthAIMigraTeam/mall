@@ -38,9 +38,9 @@ spec:
         image: alpine/git:latest
         command: [sh]
         source: |
-          # 向 AIDevOps 仓库提 PR 更新 mall-admin 镜像 tag
-          git clone https://github.com/NorthAIMigraTeam/AIDevOps.git
-          cd AIDevOps
+          # 向 AIops 仓库提 PR 更新 mall-admin 镜像 tag
+          git clone https://github.com/NorthAIMigraTeam/AIops.git
+          cd AIops
           git checkout -b update-mall-admin-{{workflow.parameters.git-commit-sha}}
           sed -i "s|image:.*mall-admin:.*|image: registry.cn-beijing.aliyuncs.com/mall-h1/mall-admin:{{workflow.parameters.git-commit-sha}}|g" \
             deploy/k8s/mall/mall-admin/deployment.yaml
