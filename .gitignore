@@ -1,4 +1,24 @@
-# 注：.codebuddy/ 已改为提交 Git，不在此处忽略
+# ========================================
+# CodeBuddy CLI - Git 忽略配置
+# ========================================
+
+# 个人本地记忆（每个人的私有偏好，不提交）
+CODEBUDDY.local.md
+
+# 本地配置文件（包含个人权限、语言等设置）
+.codebuddy/settings.json
+
+# 自动记忆目录（AI 自动生成的持久记忆，个人专属）
+.codebuddy/memories/
+
+# ========================================
+# 以下文件/目录应提交 git（团队共享）:
+#   .codebuddy/CODEBUDDY.md    - 项目级共享指令
+#   .codebuddy/rules/          - 模块化项目规则
+#   .codebuddy/skills/         - 团队共享技能
+#   .codebuddy/agents/         - 团队共享子代理
+#   .codebuddy/commands/       - 自定义命令
+# ========================================
 
 # Java 构建产物
 target/
@@ -10,9 +30,8 @@ target/
 .mvn/
 .gradle/
 
-# 操作系统文件
+# macOS
 .DS_Store
-Thumbs.db
 
 # 编辑器配置
 .idea/
