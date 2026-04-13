@@ -1,0 +1,40 @@
+{
+  "name": "mall-app-build",
+  "version": "1.0.0",
+  "scripts": {
+    "build:h5": "cross-env NODE_ENV=production UNI_PLATFORM=h5 vue-cli-service uni-build"
+  },
+  "dependencies": {
+    "@dcloudio/uni-app-plus": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-h5": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-helper-json": "*",
+    "@dcloudio/uni-i18n": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-mp-vue": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-mp-weixin": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-stat": "^2.0.2-3080720230703001",
+    "core-js": "^3.6.5",
+    "flyio": "^0.6.2",
+    "vue": "^2.6.11",
+    "vuex": "^3.2.0"
+  },
+  "devDependencies": {
+    "@dcloudio/types": "*",
+    "@dcloudio/uni-automator": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-cli-i18n": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-cli-shared": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-migration": "^2.0.2-3080720230703001",
+    "@dcloudio/uni-template-compiler": "^2.0.2-3080720230703001",
+    "@dcloudio/vue-cli-plugin-hbuilderx": "^2.0.2-3080720230703001",
+    "@dcloudio/vue-cli-plugin-uni": "^2.0.2-3080720230703001",
+    "@dcloudio/vue-cli-plugin-uni-optimize": "^2.0.2-3080720230703001",
+    "@dcloudio/webpack-uni-mp-loader": "^2.0.2-3080720230703001",
+    "@dcloudio/webpack-uni-pages-loader": "^2.0.2-3080720230703001",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "babel-plugin-import": "^1.11.0",
+    "cross-env": "^7.0.2",
+    "postcss-comment": "^2.0.0",
+    "sass": "^1.77.8",
+    "vue-template-compiler": "^2.6.11"
+  }
+}
