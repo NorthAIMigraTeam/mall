@@ -39,7 +39,7 @@ mvn clean package -Pdocker docker:build
 
 ### 仓库定位
 
-本仓库是 NorthAIMigraTeam 三仓库架构（mall / AIMigraProject / AIDevOps）中的**业务仓库**，仅包含服务源码和 CI 触发配置；部署清单位于 `AIDevOps` 仓库。
+本仓库是 NorthAIMigraTeam 三仓库架构（mall / AIMigraProject / AIOps）中的**业务仓库**，仅包含服务源码和 CI 触发配置；部署清单位于 `AIOps` 仓库。
 
 ### 模块依赖关系
 
@@ -145,7 +145,7 @@ mall-admin/src/main/java/com/macro/mall/
 - `ci/argo-workflows/` — 基于 Kaniko 的各服务镜像构建模板
 - `ci/argo-events/` — GitHub webhook 事件源，push 时触发构建
 - **路径过滤触发**（`ci/argo-events/sensor.yaml`）：`mall-admin/` 下的变更只触发 `build-mall-admin`，`mall-portal/` 和 `mall-search/` 同理
-- 构建完成后，Argo Workflows 自动向 `AIDevOps` 仓库提 PR，更新 `deploy/k8s/mall/*/deployment.yaml` 中的镜像 tag
+- 构建完成后，Argo Workflows 自动向 `AIOps` 仓库提 PR，更新 `deploy/k8s/mall/*/deployment.yaml` 中的镜像 tag
 
 ### 部署脚本
 
