@@ -124,13 +124,13 @@ mall-admin/src/main/java/com/macro/mall/
 - Schema + 种子数据：`document/sql/mall.sql`（407KB）
 - 连接池：阿里 Druid，开发默认参数（初始 5、最小空闲 10、最大 20）
 
-### 基础设施服务（Docker Compose）
+### 基础设施服务（Docker Compose，本地开发用）
 
-定义于 `document/docker/docker-compose-env.yml`：
+定义于 `document/docker/docker-compose-env.yml`。**注意**：以下版本是 mall 开源项目原版的本地开发配置，**生产部署版本见 `AIOps/deploy/k8s/mall/*/middleware/` 下的 K8S YAML**（例如生产 MySQL 为 8.0，对齐 v5 方案 L180）。
 
 | 服务 | 端口 | 用途 |
 |------|------|------|
-| MySQL 5.7 | 3306 | 主数据库 |
+| MySQL 5.7 | 3306 | 主数据库（本地开发；生产为 8.0）|
 | Redis 7 | 6379 | 缓存 + 会话 |
 | Elasticsearch 7.17.3 | 9200, 9300 | 商品搜索 |
 | RabbitMQ 3.9.11 | 5672, 15672 | 订单取消队列 |
