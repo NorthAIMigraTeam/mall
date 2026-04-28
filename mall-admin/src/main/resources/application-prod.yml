@@ -5,8 +5,12 @@ spring:
     password: 123456
     druid:
       initial-size: 5 #连接池初始化大小
-      min-idle: 10 #最小空闲连接数
-      max-active: 20 #最大连接数
+      min-idle: 20 #最小空闲连接数（压测期上调，避免突发扩 Pod 时建连延迟）
+      max-active: 30 #最大连接数（压测期上调；与 portal/search 共用，确认 MySQL max_connections ≥ 500）
+      max-wait: 3000 #获取连接最大等待 3s，避免业务线程被池耗尽长时间阻塞
+      validation-query: SELECT 1
+      test-while-idle: true #空闲时心跳保活，防止 wait_timeout 半关连接
+      time-between-eviction-runs-millis: 60000
       web-stat-filter:
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" #不统计这些请求数据
       stat-view-servlet: #访问监控网页的登录用户名和密码
@@ -17,13 +21,19 @@ spring:
     database: 0 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
     password: # Redis服务器连接密码（默认为空）
-    timeout: 300ms # 连接超时时间（毫秒）
+    timeout: 3000ms # 连接超时时间（压测期上调，避免毛刺被判超时）
+    lettuce:
+      pool:
+        max-active: 20 #连接池最大连接数（压测期显式池化，避免单连接打满）
+        max-idle: 10
+        min-idle: 5
+        max-wait: 1000ms
 
 minio:
-  endpoint: http://192.168.3.101:9090 #MinIO服务所在地址
-  bucketName: mall #存储桶名称
-  accessKey: minioadmin #访问的key
-  secretKey: minioadmin #访问的秘钥
+  endpoint: ${MINIO_ENDPOINT:http://minio:9000} #MinIO 服务地址（生产由部署侧注入；默认走集群内 svc）
+  bucketName: ${MINIO_BUCKET:mall} #存储桶名称
+  accessKey: ${MINIO_ROOT_USER:} #生产凭据由 K8s Secret minio-secret 注入，禁止硬编码默认值
+  secretKey: ${MINIO_ROOT_PASSWORD:} #同上，与 PROD 轮换后的强凭据保持一致
 
 logging:
   file:

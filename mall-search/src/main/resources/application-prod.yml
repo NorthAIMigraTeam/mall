@@ -5,8 +5,12 @@ spring:
     password: 123456
     druid:
       initial-size: 5 #连接池初始化大小
-      min-idle: 10 #最小空闲连接数
-      max-active: 20 #最大连接数
+      min-idle: 20 #最小空闲连接数（压测期上调，避免突发扩 Pod 时建连延迟）
+      max-active: 30 #最大连接数（压测期上调；与 portal/admin 共用，确认 MySQL max_connections ≥ 500）
+      max-wait: 3000 #获取连接最大等待 3s，避免业务线程被池耗尽长时间阻塞
+      validation-query: SELECT 1
+      test-while-idle: true #空闲时心跳保活，防止 wait_timeout 半关连接
+      time-between-eviction-runs-millis: 60000
       web-stat-filter:
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" #不统计这些请求数据
       stat-view-servlet: #访问监控网页的登录用户名和密码
